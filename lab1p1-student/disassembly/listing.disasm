@@ -1,0 +1,544 @@
+Disassembly Listing for lab1p1-student
+Generated From:
+/Users/Manos/Documents/ECE372A_Development/NetBeans/lab1/lab1p1-student/dist/default/debug/lab1p1-student.debug.elf
+Sep 24, 2015 2:30:20 AM
+
+---  /Users/Manos/Documents/ECE372A_Development/NetBeans/lab1/lab1p1-student/timer.c  -------------------
+1:                   /*
+2:                    * File:   timer.c
+3:                    * Authors:
+4:                    *
+5:                    * Created on December 30, 2014, 8:07 PM
+6:                    */
+7:                   
+8:                   #include <xc.h>
+9:                   
+10:                  void initTimer1(){
+9D0002E4  27BDFFF8   ADDIU SP, SP, -8
+9D0002E8  AFBE0004   SW S8, 4(SP)
+9D0002EC  03A0F021   ADDU S8, SP, ZERO
+11:                      TMR1 = 0;
+9D0002F0  3C02BF80   LUI V0, -16512
+9D0002F4  AC400610   SW ZERO, 1552(V0)
+12:                      T1CONbits.TCKPS = 0;
+9D0002F8  3C03BF80   LUI V1, -16512
+9D0002FC  94620600   LHU V0, 1536(V1)
+9D000300  7C022904   INS V0, ZERO, 4, 2
+9D000304  A4620600   SH V0, 1536(V1)
+13:                      T1CONbits.TCS = 0;
+9D000308  3C03BF80   LUI V1, -16512
+9D00030C  94620600   LHU V0, 1536(V1)
+9D000310  7C020844   INS V0, ZERO, 1, 1
+9D000314  A4620600   SH V0, 1536(V1)
+14:                      IFS0bits.T1IF = 0;
+9D000318  3C03BF88   LUI V1, -16504
+9D00031C  8C621030   LW V0, 4144(V1)
+9D000320  7C022104   INS V0, ZERO, 4, 1
+9D000324  AC621030   SW V0, 4144(V1)
+15:                  }
+9D000328  03C0E821   ADDU SP, S8, ZERO
+9D00032C  8FBE0004   LW S8, 4(SP)
+9D000330  27BD0008   ADDIU SP, SP, 8
+9D000334  03E00008   JR RA
+9D000338  00000000   NOP
+16:                  
+17:                  //Uses timer 2
+18:                  void delayMs(unsigned int delay){
+9D00033C  27BDFFF8   ADDIU SP, SP, -8
+9D000340  AFBE0004   SW S8, 4(SP)
+9D000344  03A0F021   ADDU S8, SP, ZERO
+9D000348  AFC40008   SW A0, 8(S8)
+19:                      //TODO: Create a delay using timer 2 for "delay" microseconds.
+20:                      TMR1 = 0;
+9D00034C  3C02BF80   LUI V0, -16512
+9D000350  AC400610   SW ZERO, 1552(V0)
+21:                      PR1 = delay*624;
+9D000354  8FC30008   LW V1, 8(S8)
+9D000358  00601021   ADDU V0, V1, ZERO
+9D00035C  000210C0   SLL V0, V0, 3
+9D000360  00022080   SLL A0, V0, 2
+9D000364  00441021   ADDU V0, V0, A0
+9D000368  00431023   SUBU V0, V0, V1
+9D00036C  00021100   SLL V0, V0, 4
+9D000370  00401821   ADDU V1, V0, ZERO
+9D000374  3C02BF80   LUI V0, -16512
+9D000378  AC430620   SW V1, 1568(V0)
+22:                      IFS0bits.T1IF = 0;
+9D00037C  3C03BF88   LUI V1, -16504
+9D000380  8C621030   LW V0, 4144(V1)
+9D000384  7C022104   INS V0, ZERO, 4, 1
+9D000388  AC621030   SW V0, 4144(V1)
+23:                      T1CONbits.ON = 1;
+9D00038C  3C03BF80   LUI V1, -16512
+9D000390  94620600   LHU V0, 1536(V1)
+9D000394  24040001   ADDIU A0, ZERO, 1
+9D000398  7C827BC4   INS V0, A0, 15, 1
+9D00039C  A4620600   SH V0, 1536(V1)
+24:                      while(IFS0bits.T1IF == 0);
+9D0003A0  00000000   NOP
+9D0003A4  3C02BF88   LUI V0, -16504
+9D0003A8  8C421030   LW V0, 4144(V0)
+9D0003AC  30420010   ANDI V0, V0, 16
+9D0003B0  1040FFFC   BEQ V0, ZERO, 0x9D0003A4
+9D0003B4  00000000   NOP
+25:                      T1CONbits.ON = 0;
+9D0003B8  3C03BF80   LUI V1, -16512
+9D0003BC  94620600   LHU V0, 1536(V1)
+9D0003C0  7C027BC4   INS V0, ZERO, 15, 1
+9D0003C4  A4620600   SH V0, 1536(V1)
+26:                  }
+9D0003C8  03C0E821   ADDU SP, S8, ZERO
+9D0003CC  8FBE0004   LW S8, 4(SP)
+9D0003D0  27BD0008   ADDIU SP, SP, 8
+9D0003D4  03E00008   JR RA
+9D0003D8  00000000   NOP
+---  /Users/Manos/Documents/ECE372A_Development/NetBeans/lab1/lab1p1-student/switch.c  ------------------
+1:                   /*
+2:                    * File:   switch.c
+3:                    * Author: Garrett
+4:                    *
+5:                    * Created on September 19, 2015, 10:46 AM
+6:                    */
+7:                   
+8:                   #include <xc.h>
+9:                   
+10:                  #define INPUT 1
+11:                  #define OUTPUT 0
+12:                  
+13:                  #define ENABLED 1
+14:                  #define DISABLED 0
+15:                  
+16:                  void initSW1(){
+9D0004B8  27BDFFF8   ADDIU SP, SP, -8
+9D0004BC  AFBE0004   SW S8, 4(SP)
+9D0004C0  03A0F021   ADDU S8, SP, ZERO
+17:                      //TODO: Initialize the appropriate pins to work with the external switch using a
+18:                      //change notification interrupt.
+19:                      TRISDbits.TRISD0 = INPUT;           // Configure switch as input
+9D0004C4  3C03BF88   LUI V1, -16504
+9D0004C8  94626310   LHU V0, 25360(V1)
+9D0004CC  24040001   ADDIU A0, ZERO, 1
+9D0004D0  7C820004   INS V0, A0, 0, 1
+9D0004D4  A4626310   SH V0, 25360(V1)
+20:                      CNCONDbits.ON = 1;                  // Enable overall interrupt
+9D0004D8  3C03BF88   LUI V1, -16504
+9D0004DC  94626370   LHU V0, 25456(V1)
+9D0004E0  24040001   ADDIU A0, ZERO, 1
+9D0004E4  7C827BC4   INS V0, A0, 15, 1
+9D0004E8  A4626370   SH V0, 25456(V1)
+21:                      CNENDbits.CNIED0 = ENABLED;         // Enable pin CN
+9D0004EC  3C03BF88   LUI V1, -16504
+9D0004F0  94626380   LHU V0, 25472(V1)
+9D0004F4  24040001   ADDIU A0, ZERO, 1
+9D0004F8  7C820004   INS V0, A0, 0, 1
+9D0004FC  A4626380   SH V0, 25472(V1)
+22:                      CNPUDbits.CNPUD0 = ENABLED;         // Enable pull-up resistor
+9D000500  3C03BF88   LUI V1, -16504
+9D000504  94626350   LHU V0, 25424(V1)
+9D000508  24040001   ADDIU A0, ZERO, 1
+9D00050C  7C820004   INS V0, A0, 0, 1
+9D000510  A4626350   SH V0, 25424(V1)
+23:                      IFS1bits.CNDIF = 0;                 // Put down the flag
+9D000514  3C03BF88   LUI V1, -16504
+9D000518  8C621040   LW V0, 4160(V1)
+9D00051C  7C027BC4   INS V0, ZERO, 15, 1
+9D000520  AC621040   SW V0, 4160(V1)
+24:                      IPC8bits.CNIP = 2;                  // Configure interrupt priority
+9D000524  3C03BF88   LUI V1, -16504
+9D000528  8C621110   LW V0, 4368(V1)
+9D00052C  24040002   ADDIU A0, ZERO, 2
+9D000530  7C826284   INS V0, A0, 10, 3
+9D000534  AC621110   SW V0, 4368(V1)
+25:                      IPC8bits.CNIS = 3;                  // Configure the interrupt sub-priority
+9D000538  3C03BF88   LUI V1, -16504
+9D00053C  8C621110   LW V0, 4368(V1)
+9D000540  24040003   ADDIU A0, ZERO, 3
+9D000544  7C824A04   INS V0, A0, 8, 2
+9D000548  AC621110   SW V0, 4368(V1)
+26:                      IEC1bits.CNDIE = ENABLED;           // Enable interrupt for D pins
+9D00054C  3C03BF88   LUI V1, -16504
+9D000550  8C621070   LW V0, 4208(V1)
+9D000554  24040001   ADDIU A0, ZERO, 1
+9D000558  7C827BC4   INS V0, A0, 15, 1
+9D00055C  AC621070   SW V0, 4208(V1)
+27:                  }
+9D000560  03C0E821   ADDU SP, S8, ZERO
+9D000564  8FBE0004   LW S8, 4(SP)
+9D000568  27BD0008   ADDIU SP, SP, 8
+9D00056C  03E00008   JR RA
+9D000570  00000000   NOP
+---  /Users/Manos/Documents/ECE372A_Development/NetBeans/lab1/lab1p1-student/main.c  --------------------
+1:                   // ******************************************************************************************* //
+2:                   //
+3:                   // File:         lab1p1.c
+4:                   // Date:         
+5:                   // Authors:      
+6:                   //
+7:                   // Description: Part 1 for lab 1
+8:                   // ******************************************************************************************* //
+9:                   
+10:                  #include <xc.h>
+11:                  #include <sys/attribs.h>
+12:                  #include "leds.h"
+13:                  #include "interrupt.h"
+14:                  #include "switch.h"
+15:                  #include "timer.h"
+16:                  
+17:                  
+18:                  // Define states
+19:                  typedef enum stateTypeEnum{
+20:                      waitPush, waitRelease, count
+21:                  } stateType;
+22:                  
+23:                  volatile stateType state = waitPush;
+24:                  
+25:                  /* Please note that the configuration file has changed from lab 0.
+26:                   * the oscillator is now of a different frequency.
+27:                   */
+28:                  int main(void)
+29:                  {
+9D000184  27BDFFE8   ADDIU SP, SP, -24
+9D000188  AFBF0014   SW RA, 20(SP)
+9D00018C  AFBE0010   SW S8, 16(SP)
+9D000190  03A0F021   ADDU S8, SP, ZERO
+30:                      
+31:                      initLEDs();
+9D000194  0F400000   JAL initLEDs
+9D000198  00000000   NOP
+32:                      initSW1();
+9D00019C  0F40012E   JAL initSW1
+9D0001A0  00000000   NOP
+33:                      
+34:                      enableInterrupts();
+9D0001A4  0F40015D   JAL enableInterrupts
+9D0001A8  00000000   NOP
+35:                      
+36:                      while(1)
+37:                      {
+38:                          //TODO: Using a finite-state machine, define the behavior of the LEDs
+39:                          //Debounce the switch
+40:                          switch(state){
+9D0001AC  8F828014   LW V0, -32748(GP)
+9D0001B0  24030001   ADDIU V1, ZERO, 1
+9D0001B4  1043000E   BEQ V0, V1, 0x9D0001F0
+9D0001B8  00000000   NOP
+9D0001BC  2C430001   SLTIU V1, V0, 1
+9D0001C0  1460000E   BNE V1, ZERO, 0x9D0001FC
+9D0001C4  00000000   NOP
+9D0001C8  24030002   ADDIU V1, ZERO, 2
+9D0001CC  10430003   BEQ V0, V1, 0x9D0001DC
+9D0001D0  00000000   NOP
+41:                              case waitPush:
+42:                                  break;
+9D0001FC  00000000   NOP
+43:                              case count:
+44:                                  delayMs(5);
+9D0001DC  24040005   ADDIU A0, ZERO, 5
+9D0001E0  0F4000CF   JAL delayMs
+9D0001E4  00000000   NOP
+45:                                  // check button
+46:                                  
+47:                                  break;
+9D0001E8  0B400080   J 0x9D000200
+9D0001EC  00000000   NOP
+48:                              case waitRelease:
+49:                                  break;
+9D0001F0  00000000   NOP
+9D0001F4  0B40006B   J 0x9D0001AC
+9D0001F8  00000000   NOP
+50:                          }
+51:                      }
+9D0001D4  0B40006B   J 0x9D0001AC
+9D0001D8  00000000   NOP
+9D000200  0B40006B   J 0x9D0001AC
+9D000204  00000000   NOP
+52:                      
+53:                      return 0;
+54:                  }
+55:                  
+56:                  void __ISR(_CHANGE_NOTICE_VECTOR, IPL3SRS) _CNInterrupt(void){
+9D000208  415DE800   RDPGPR SP, SP
+9D00020C  401A7000   MFC0 K0, EPC
+9D000210  401B6000   MFC0 K1, Status
+9D000214  27BDFFD8   ADDIU SP, SP, -40
+9D000218  AFBA0024   SW K0, 36(SP)
+9D00021C  401A6002   MFC0 K0, SRSCtl
+9D000220  AFBB0020   SW K1, 32(SP)
+9D000224  AFBA001C   SW K0, 28(SP)
+9D000228  7C1B7844   INS K1, ZERO, 1, 15
+9D00022C  377B0C00   ORI K1, K1, 3072
+9D000230  409B6000   MTC0 K1, Status
+9D000234  00001012   MFLO V0
+9D000238  AFA20014   SW V0, 20(SP)
+9D00023C  00001810   MFHI V1
+9D000240  AFA30010   SW V1, 16(SP)
+9D000244  03A0F021   ADDU S8, SP, ZERO
+57:                      //TODO: Implement the interrupt to capture the press of the button
+58:                      PORTDbits.RD0 = 1;
+9D000248  3C03BF88   LUI V1, -16504
+9D00024C  94626320   LHU V0, 25376(V1)
+9D000250  24040001   ADDIU A0, ZERO, 1
+9D000254  7C820004   INS V0, A0, 0, 1
+9D000258  A4626320   SH V0, 25376(V1)
+59:                      IFS1bits.CNDIF = 0;
+9D00025C  3C03BF88   LUI V1, -16504
+9D000260  8C621040   LW V0, 4160(V1)
+9D000264  7C027BC4   INS V0, ZERO, 15, 1
+9D000268  AC621040   SW V0, 4160(V1)
+60:                      if(state == waitPush) state = count;
+9D00026C  8F828014   LW V0, -32748(GP)
+9D000270  14400005   BNE V0, ZERO, 0x9D000288
+9D000274  00000000   NOP
+9D000278  24020002   ADDIU V0, ZERO, 2
+9D00027C  AF828014   SW V0, -32748(GP)
+9D000280  0B4000A9   J 0x9D0002A4
+9D000284  00000000   NOP
+61:                      else if(state == waitRelease){
+9D000288  8F838014   LW V1, -32748(GP)
+9D00028C  24020001   ADDIU V0, ZERO, 1
+9D000290  14620004   BNE V1, V0, 0x9D0002A4
+9D000294  00000000   NOP
+62:                          state = waitPush;
+9D000298  AF808014   SW ZERO, -32748(GP)
+63:                          toggleLEDs();
+9D00029C  0F400045   JAL toggleLEDs
+9D0002A0  00000000   NOP
+64:                      }
+65:                  }
+9D0002A4  03C0E821   ADDU SP, S8, ZERO
+9D0002A8  8FA20014   LW V0, 20(SP)
+9D0002AC  00400013   MTLO V0
+9D0002B0  8FA30010   LW V1, 16(SP)
+9D0002B4  00600011   MTHI V1
+9D0002B8  41606000   DI ZERO
+9D0002BC  000000C0   EHB
+9D0002C0  8FBB001C   LW K1, 28(SP)
+9D0002C4  8FBA0024   LW K0, 36(SP)
+9D0002C8  409B6002   MTC0 K1, SRSCtl
+9D0002CC  8FBB0020   LW K1, 32(SP)
+9D0002D0  409A7000   MTC0 K0, EPC
+9D0002D4  27BD0028   ADDIU SP, SP, 40
+9D0002D8  41DDE800   WRPGPR SP, SP
+9D0002DC  409B6000   MTC0 K1, Status
+9D0002E0  42000018   ERET
+---  /Users/Manos/Documents/ECE372A_Development/NetBeans/lab1/lab1p1-student/leds.c  --------------------
+1:                   /*
+2:                   * File:   leds.c
+3:                   * Author: 
+4:                   *
+5:                   * Created on December 27, 2014, 1:31 PM
+6:                   */
+7:                   
+8:                   #include <xc.h>
+9:                   #include "leds.h"
+10:                  
+11:                  #define TRIS_RUN TRISGbits.TRISG12
+12:                  #define TRIS_STOP TRISGbits.TRISG14
+13:                  #define ODC_RUN ODCGbits.ODCG12
+14:                  #define ODC_STOP ODCGbits.ODCG14
+15:                  #define RUN_LED LATGbits.LATG12 // TRD1
+16:                  #define STOP_LED LATGbits.LATG14 // TRD2
+17:                  
+18:                  #define ON 1
+19:                  #define OFF 0
+20:                  
+21:                  #define OUTPUT 0
+22:                  #define INPUT 1
+23:                  
+24:                  typedef enum ledStateTypeEnum{
+25:                      run, stop
+26:                  } ledStateType;
+27:                  
+28:                  ledStateType ledState = run;
+29:                  
+30:                  void initLEDs(){
+9D000000  27BDFFF8   ADDIU SP, SP, -8
+9D000004  AFBE0004   SW S8, 4(SP)
+9D000008  03A0F021   ADDU S8, SP, ZERO
+31:                      TRIS_RUN = OUTPUT;
+9D00000C  3C03BF88   LUI V1, -16504
+9D000010  94626610   LHU V0, 26128(V1)
+9D000014  7C026304   INS V0, ZERO, 12, 1
+9D000018  A4626610   SH V0, 26128(V1)
+32:                      TRIS_STOP = OUTPUT;
+9D00001C  3C03BF88   LUI V1, -16504
+9D000020  94626610   LHU V0, 26128(V1)
+9D000024  7C027384   INS V0, ZERO, 14, 1
+9D000028  A4626610   SH V0, 26128(V1)
+33:                      
+34:                      ODC_RUN = 1;
+9D00002C  3C03BF88   LUI V1, -16504
+9D000030  94626640   LHU V0, 26176(V1)
+9D000034  24040001   ADDIU A0, ZERO, 1
+9D000038  7C826304   INS V0, A0, 12, 1
+9D00003C  A4626640   SH V0, 26176(V1)
+35:                      ODC_STOP = 1;
+9D000040  3C03BF88   LUI V1, -16504
+9D000044  94626640   LHU V0, 26176(V1)
+9D000048  24040001   ADDIU A0, ZERO, 1
+9D00004C  7C827384   INS V0, A0, 14, 1
+9D000050  A4626640   SH V0, 26176(V1)
+36:                      
+37:                      RUN_LED = ON;
+9D000054  3C03BF88   LUI V1, -16504
+9D000058  94626630   LHU V0, 26160(V1)
+9D00005C  24040001   ADDIU A0, ZERO, 1
+9D000060  7C826304   INS V0, A0, 12, 1
+9D000064  A4626630   SH V0, 26160(V1)
+38:                      STOP_LED = OFF;
+9D000068  3C03BF88   LUI V1, -16504
+9D00006C  94626630   LHU V0, 26160(V1)
+9D000070  7C027384   INS V0, ZERO, 14, 1
+9D000074  A4626630   SH V0, 26160(V1)
+39:                  }
+9D000078  03C0E821   ADDU SP, S8, ZERO
+9D00007C  8FBE0004   LW S8, 4(SP)
+9D000080  27BD0008   ADDIU SP, SP, 8
+9D000084  03E00008   JR RA
+9D000088  00000000   NOP
+40:                  
+41:                  void runLED(){
+9D00008C  27BDFFF8   ADDIU SP, SP, -8
+9D000090  AFBE0004   SW S8, 4(SP)
+9D000094  03A0F021   ADDU S8, SP, ZERO
+42:                      RUN_LED = ON;
+9D000098  3C03BF88   LUI V1, -16504
+9D00009C  94626630   LHU V0, 26160(V1)
+9D0000A0  24040001   ADDIU A0, ZERO, 1
+9D0000A4  7C826304   INS V0, A0, 12, 1
+9D0000A8  A4626630   SH V0, 26160(V1)
+43:                      STOP_LED = OFF;
+9D0000AC  3C03BF88   LUI V1, -16504
+9D0000B0  94626630   LHU V0, 26160(V1)
+9D0000B4  7C027384   INS V0, ZERO, 14, 1
+9D0000B8  A4626630   SH V0, 26160(V1)
+44:                  }
+9D0000BC  03C0E821   ADDU SP, S8, ZERO
+9D0000C0  8FBE0004   LW S8, 4(SP)
+9D0000C4  27BD0008   ADDIU SP, SP, 8
+9D0000C8  03E00008   JR RA
+9D0000CC  00000000   NOP
+45:                  
+46:                  void stopLED(){
+9D0000D0  27BDFFF8   ADDIU SP, SP, -8
+9D0000D4  AFBE0004   SW S8, 4(SP)
+9D0000D8  03A0F021   ADDU S8, SP, ZERO
+47:                      RUN_LED = OFF;
+9D0000DC  3C03BF88   LUI V1, -16504
+9D0000E0  94626630   LHU V0, 26160(V1)
+9D0000E4  7C026304   INS V0, ZERO, 12, 1
+9D0000E8  A4626630   SH V0, 26160(V1)
+48:                      STOP_LED = ON;
+9D0000EC  3C03BF88   LUI V1, -16504
+9D0000F0  94626630   LHU V0, 26160(V1)
+9D0000F4  24040001   ADDIU A0, ZERO, 1
+9D0000F8  7C827384   INS V0, A0, 14, 1
+9D0000FC  A4626630   SH V0, 26160(V1)
+49:                  }
+9D000100  03C0E821   ADDU SP, S8, ZERO
+9D000104  8FBE0004   LW S8, 4(SP)
+9D000108  27BD0008   ADDIU SP, SP, 8
+9D00010C  03E00008   JR RA
+9D000110  00000000   NOP
+50:                  
+51:                  void toggleLEDs(){
+9D000114  27BDFFE8   ADDIU SP, SP, -24
+9D000118  AFBF0014   SW RA, 20(SP)
+9D00011C  AFBE0010   SW S8, 16(SP)
+9D000120  03A0F021   ADDU S8, SP, ZERO
+52:                      switch(ledState){
+9D000124  8F828010   LW V0, -32752(GP)
+9D000128  10400006   BEQ V0, ZERO, 0x9D000144
+9D00012C  00000000   NOP
+9D000130  24030001   ADDIU V1, ZERO, 1
+9D000134  10430009   BEQ V0, V1, 0x9D00015C
+9D000138  00000000   NOP
+9D00013C  0B40005B   J 0x9D00016C
+9D000140  00000000   NOP
+53:                          case run:
+54:                              ledState = stop;
+9D000144  24020001   ADDIU V0, ZERO, 1
+9D000148  AF828010   SW V0, -32752(GP)
+55:                              stopLED();
+9D00014C  0F400034   JAL stopLED
+9D000150  00000000   NOP
+56:                              break;
+9D000154  0B40005B   J 0x9D00016C
+9D000158  00000000   NOP
+57:                          case stop:
+58:                              ledState = run;
+9D00015C  AF808010   SW ZERO, -32752(GP)
+59:                              runLED();
+9D000160  0F400023   JAL runLED
+9D000164  00000000   NOP
+60:                              break;
+9D000168  00000000   NOP
+61:                      }
+62:                  }
+9D00016C  03C0E821   ADDU SP, S8, ZERO
+9D000170  8FBF0014   LW RA, 20(SP)
+9D000174  8FBE0010   LW S8, 16(SP)
+9D000178  27BD0018   ADDIU SP, SP, 24
+9D00017C  03E00008   JR RA
+9D000180  00000000   NOP
+---  /Users/Manos/Documents/ECE372A_Development/NetBeans/lab1/lab1p1-student/interrupt.c  ---------------
+1:                   /* 
+2:                    * File:   interrupt.c
+3:                    * Author: gvanhoy
+4:                    *
+5:                    * Created on August 27, 2015, 3:32 PM
+6:                    */
+7:                   
+8:                   #include <xc.h>
+9:                   
+10:                  void enableInterrupts(){
+9D000574  27BDFFF0   ADDIU SP, SP, -16
+9D000578  AFBE000C   SW S8, 12(SP)
+9D00057C  03A0F021   ADDU S8, SP, ZERO
+11:                      unsigned int val;
+12:                  
+13:                      // set the CP0 cause IV bit high
+14:                      asm volatile("mfc0   %0,$13" : "=r"(val));
+9D000580  40026800   MFC0 V0, Cause
+9D000584  AFC20000   SW V0, 0(S8)
+15:                      val |= 0x00800000;
+9D000588  8FC30000   LW V1, 0(S8)
+9D00058C  3C020080   LUI V0, 128
+9D000590  00621025   OR V0, V1, V0
+9D000594  AFC20000   SW V0, 0(S8)
+16:                      asm volatile("mtc0   %0,$13" : "+r"(val));
+9D000598  8FC20000   LW V0, 0(S8)
+9D00059C  40826800   MTC0 V0, Cause
+9D0005A0  AFC20000   SW V0, 0(S8)
+17:                  
+18:                      INTCONSET = _INTCON_MVEC_MASK;
+9D0005A4  3C02BF88   LUI V0, -16504
+9D0005A8  24031000   ADDIU V1, ZERO, 4096
+9D0005AC  AC431008   SW V1, 4104(V0)
+19:                  
+20:                      unsigned int status = 0;
+9D0005B0  AFC00004   SW ZERO, 4(S8)
+21:                      asm volatile("ei    %0" : "=r"(status));
+9D0005B4  41626020   EI V0
+9D0005B8  AFC20004   SW V0, 4(S8)
+22:                  }
+9D0005BC  03C0E821   ADDU SP, S8, ZERO
+9D0005C0  8FBE000C   LW S8, 12(SP)
+9D0005C4  27BD0010   ADDIU SP, SP, 16
+9D0005C8  03E00008   JR RA
+9D0005CC  00000000   NOP
+23:                  
+24:                  void disableInterrupts(){
+9D0005D0  27BDFFF0   ADDIU SP, SP, -16
+9D0005D4  AFBE000C   SW S8, 12(SP)
+9D0005D8  03A0F021   ADDU S8, SP, ZERO
+25:                      unsigned int status = 0;
+9D0005DC  AFC00000   SW ZERO, 0(S8)
+26:                      asm volatile("di    %0" : "=r"(status));
+9D0005E0  41626000   DI V0
+9D0005E4  AFC20000   SW V0, 0(S8)
+27:                  }
+9D0005E8  03C0E821   ADDU SP, S8, ZERO
+9D0005EC  8FBE000C   LW S8, 12(SP)
+9D0005F0  03E00008   JR RA
+9D0005F4  27BD0010   ADDIU SP, SP, 16

@@ -8,7 +8,9 @@
 #ifndef SWITCH_H
 #define	SWITCH_H
 
-void initSW2();
+#define SW1 PORTDbits.RD0
+
+void initSW1();
 
 
 #endif	/* SWITCH_H */

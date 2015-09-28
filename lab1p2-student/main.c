@@ -19,7 +19,10 @@
 
 int main(void)
 {
-
+    initTimer2();
+    initLCD();
+    enableInterrupts();
+    
     while(1)
     {
         testLCD();
